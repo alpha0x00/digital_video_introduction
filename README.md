@@ -1,4 +1,7 @@
-[🇨🇳](/simplified-chinese/README-cn.md "Simplified Chinese")
+[🇨🇳](/README-cn.md "Simplified Chinese")
+[🇯🇵](/README-ja.md "Japanese")
+[🇮🇹](/README-it.md "Italian")
+[🇰🇷](/README-ko.md "Korean")
 
 [![license](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
 
@@ -101,7 +104,7 @@ For instance, look at the picture down below. The first face is fully colored. T
 
 We can see that the **red color** will be the one that **contributes more** (the brightest parts in the second face) to the final color while the **blue color** contribution can be mostly **only seen in Mario's eyes** (last face) and part of his clothes, see how **all planes contribute less** (darkest parts) to the **Mario's mustache**.
 
-And each color intensity requires a certain amount of bits, this quantity is known as **bit depth**. Let's say we spend **8 bits** (accepting values from 0 to 255) per color (plane), therefore we have a **color depth** of **24 (8 * 3) bits** and we can also infer that we could use 2 to the power of 24 different colors.
+And each color intensity requires a certain amount of bits, this quantity is known as **bit depth**. Let's say we spend **8 bits** (accepting values from 0 to 255) per color (plane), therefore we have a **color depth** of **24 bits** (8 bits * 3 planes R/G/B), and we can also infer that we could use 2 to the power of 24 different colors.
 
 > **It's great** to learn [how an image is captured from the world to the bits](http://www.cambridgeincolour.com/tutorials/camera-sensors.htm).
 
@@ -131,7 +134,7 @@ Finally, we can define a **video** as a **succession of *n* frames** in **time**
 
 The number of bits per second needed to show a video is its **bit rate**.
 
-> bit rate = width * height * * bit depth * frames per second
+> bit rate = width * height * bit depth * frames per second
 
 For example, a video with 30 frames per second, 24 bits per pixel, resolution of 480x240 will need **82,944,000 bits per second** or 82.944 Mbps (30x480x240x24) if we don't employ any kind of compression.
 
@@ -154,7 +157,7 @@ Now we have an idea about how an **image** is represented digitally, how its **c
 
 # Redundancy removal
 
-We learned that is not feasible to use video without any compression; **a single one hour video** at 720p resolution with 30fps would **require 278GB<sup>*</sup>**. Since **using solely lossless data compression algorithms** like DEFLATE (used in PKZIP, Gzip, and PNG), **won't** decrease the required bandwidth sufficiently we need to find other ways to compress the video.
+We learned that it's not feasible to use video without any compression; **a single one hour video** at 720p resolution with 30fps would **require 278GB<sup>*</sup>**. Since **using solely lossless data compression algorithms** like DEFLATE (used in PKZIP, Gzip, and PNG), **won't** decrease the required bandwidth sufficiently we need to find other ways to compress the video.
 
 > <sup>*</sup> We found this number by multiplying 1280 x 720 x 24 x 30 x 3600 (width, height, bits per pixel, fps and time in seconds)
 
@@ -169,24 +172,27 @@ Our eyes are [more sensitive to brightness than colors](http://vanseodesign.com/
 If you are unable to see that the colors of the **squares A and B are identical** on the left side, that's fine, it's our brain playing tricks on us to **pay more attention to light and dark than color**. There is a connector, with the same color, on the right side so we (our brain) can easily spot that in fact, they're the same color.
 
 > **Simplistic explanation of how our eyes work**
->
 > The [eye is a complex organ](http://www.biologymad.com/nervoussystem/eyenotes.htm), it is composed of many parts but we are mostly interested in the cones and rods cells. The eye [contains about 120 million rod cells and 6 million cone cells](https://en.wikipedia.org/wiki/Photoreceptor_cell).
 >
-> We will abuse of an **oversimplification**, let's try to put colors and brightness in the eye's parts function. The **[rod cells](https://en.wikipedia.org/wiki/Rod_cell) are mostly responsible for brightness** while the **[cone cells](https://en.wikipedia.org/wiki/Cone_cell) are responsible for color**, there are three types of cones, each with different pigment, namely: [S-cones (Blue), M-cones (Green) and L-cones (Red)](https://upload.wikimedia.org/wikipedia/commons/1/1e/Cones_SMJ2_E.svg).
+> To **oversimplify**, let's try to put colors and brightness in the eye's parts function. The **[rod cells](https://en.wikipedia.org/wiki/Rod_cell) are mostly responsible for brightness** while the **[cone cells](https://en.wikipedia.org/wiki/Cone_cell) are responsible for color**, there are three types of cones, each with different pigment, namely: [S-cones (Blue), M-cones (Green) and L-cones (Red)](https://upload.wikimedia.org/wikipedia/commons/1/1e/Cones_SMJ2_E.svg).
 >
-> Since we have much more rod cells (brightness) than cone cells (color), one can infer that we are more capable of distinguishing dark and light than colors.
+> Since we have many more rod cells (brightness) than cone cells (color), one can infer that we are more capable of distinguishing dark and light than colors.
 >
 > ![eyes composition](/i/eyes.jpg "eyes composition")
+>
+> **Contrast sensitivity functions**
+>
+> Researchers of experimental psychology and many other fields have developed many theories on human vision. And one of them is called Contrast sensitivity functions. They are related to spatio and temporal of the light and their value presents at given init light, how much change is required before an observer reported there was a change. Notice the plural of the word "function", this is for the reason that we can measure Contrast sensitivity functions with not only black-white but also colors. The result of these experiments shows that in most cases our eyes are more sensitive to brightness than color.
 
 Once we know that we're more sensitive to **luma** (the brightness in an image) we can try to exploit it.
 
 ### Color model
 
-We first learned [how to color images](#basic-terminology) work using **RGB model** but there are other models. In fact, there is a model that separates luma (brightness) from  chrominance (colors) and it is known as **YCbCr**<sup>*</sup>.
+We first learned [how to color images](#basic-terminology) work using the **RGB model**, but there are other models too. In fact, there is a model that separates luma (brightness) from  chrominance (colors) and it is known as **YCbCr**<sup>*</sup>.
 
 > <sup>*</sup> there are more models which do the same separation.
 
-This color model uses **Y** to represent the brightness and two color channels **Cb** (chroma blue) and **Cr** (chrome red). The [YCbCr](https://en.wikipedia.org/wiki/YCbCr) can be derived from RGB and it also can be converted back to RGB. Using this model we can create full colored images as we can see down below.
+This color model uses **Y** to represent the brightness and two color channels **Cb** (chroma blue) and **Cr** (chroma red). The [YCbCr](https://en.wikipedia.org/wiki/YCbCr) can be derived from RGB and it also can be converted back to RGB. Using this model we can create full colored images as we can see down below.
 
 ![ycbcr example](/i/ycbcr.png "ycbcr example")
 
@@ -223,7 +229,7 @@ Generally, **displays** (monitors, TVs, screens and etc) utilize **only the RGB 
 
 ### Chroma subsampling
 
-With the image represented as luma and chroma components, we can take advantage of the human visual system's greater sensitity for luma resolution rather than chroma to selectively remove information. **Chroma subsampling** is the technique of encoding images using **less resolution for chroma than for luma**.
+With the image represented as luma and chroma components, we can take advantage of the human visual system's greater sensitivity for luma resolution rather than chroma to selectively remove information. **Chroma subsampling** is the technique of encoding images using **less resolution for chroma than for luma**.
 
 
 ![ycbcr subsampling resolutions](/i/ycbcr_subsampling_resolution.png "ycbcr subsampling resolutions")
@@ -233,13 +239,13 @@ How much should we reduce the chroma resolution?! It turns out that there are al
 
 These schemas are known as subsampling systems and are expressed as a 3 part ratio - `a:x:y` which defines the chroma resolution in relation to a `a x 2` block of luma pixels.
 
- * `a` is the horizontal sampling reference (usually 4),
- * `x` is the number of chroma samples in the first row of `a` pixels (horizontal resolution in relation to `a`), and
- * `y` is is the numer of changes of chroma samples between the first and seconds rows of `a` pixels.
+ * `a` is the horizontal sampling reference (usually 4)
+ * `x` is the number of chroma samples in the first row of `a` pixels (horizontal resolution in relation to `a`)
+ * `y` is the number of changes of chroma samples between the first and seconds rows of `a` pixels.
 
 > An exception to this exists with 4:1:0, which provides a single chroma sample within each `4 x 4` block of luma resolution.
 
-Common schemes used in modern codecs are: **4:4:4** *(no subsampling)***, **4:2:2, 4:1:1, 4:2:0, 4:1:0 and 3:1:1**.
+Common schemes used in modern codecs are: **4:4:4** *(no subsampling)*, **4:2:2, 4:1:1, 4:2:0, 4:1:0 and 3:1:1**.
 
 > **YCbCr 4:2:0 merge**
 >
@@ -251,14 +257,14 @@ You can see the same image encoded by the main chroma subsampling types, images 
 
 ![chroma subsampling examples](/i/chroma_subsampling_examples.jpg "chroma subsampling examples")
 
-Previously we had calculated that we needed [278GB of storage to keep a video file with one hour at 720p resolution and 30fps](#redundancy-removal). If we use **YCbCr 4:2:0** we can cut **this size in half (139 GB)**<sup>*</sup> but it is still far from the ideal.
+Previously we had calculated that we needed [278GB of storage to keep a video file with one hour at 720p resolution and 30fps](#redundancy-removal). If we use **YCbCr 4:2:0** we can cut **this size in half (139 GB)**<sup>*</sup> but it is still far from ideal.
 
 > <sup>*</sup> we found this value by multiplying width, height, bits per pixel and fps. Previously we needed 24 bits, now we only need 12.
 
 <br/>
 
 > ### Hands-on: Check YCbCr histogram
-> You can [check the YCbCr histogram with ffmpeg.](/encoding_pratical_examples.md#generates-yuv-histogram) This scene has the more blue contribution which is showed by the [histogram](https://en.wikipedia.org/wiki/Histogram).
+> You can [check the YCbCr histogram with ffmpeg.](/encoding_pratical_examples.md#generates-yuv-histogram) This scene has a higher blue contribution, which is showed by the [histogram](https://en.wikipedia.org/wiki/Histogram).
 >
 > ![ycbcr color histogram](/i/yuv_histogram.png "ycbcr color histogram")
 
@@ -301,7 +307,7 @@ What about referencing the past and future frames to provide even a better compr
 
 ### Summary
 
-These frames types are used to **provide better compression**, we'll look how this happens in the next section, for now, we can think of **I-frame is expensive while P-frame is cheaper but the cheapest is the B-frame.**
+These frames types are used to **provide better compression**. We'll look how this happens in the next section, but for now we can think of **I-frame as expensive while P-frame is cheaper but the cheapest is the B-frame.**
 
 ![frame types example](/i/frame_types.png "frame types example")
 
@@ -335,7 +341,12 @@ The objects on the frame **move in a 3D way**, the ball can become smaller when 
 
 But we can see that when we apply **motion estimation** the **data to encode is smaller** than using simply delta frame techniques.
 
-![motion estimation vs delta ](/i/comparison_delta_vs_motion_estimation.png "motion estimationvs delta")
+![motion estimation vs delta ](/i/comparison_delta_vs_motion_estimation.png "motion estimation delta")
+
+> ### How real motion compensation would look
+> This technique is applied to all blocks, very often a ball would be partitioned in more than one block.
+>  ![real world motion compensation](/i/real_world_motion_compensation.png "real world motion compensation")
+> Source: https://web.stanford.edu/class/ee398a/handouts/lectures/EE398a_MotionEstimation_2012.pdf
 
 You can [play around with these concepts using jupyter](/frame_difference_vs_motion_estimation_plus_residual.ipynb).
 
@@ -371,7 +382,7 @@ Our **prediction can be wrong**, for that reason we need to apply this technique
 ![](/i/smw_residual.png)
 
 > #### Hands-on: Check intra predictions
-> You can [generate a video with macro blocks and their predictions with ffmpeg.](/encoding_pratical_examples.md#generate-debug-video) Please check the ffmpeg documentation to understand the [meaning of each block color](https://trac.ffmpeg.org/wiki/Debug/MacroblocksAndMotionVectors).
+> You can [generate a video with macro blocks and their predictions with ffmpeg.](/encoding_pratical_examples.md#generate-debug-video) Please check the ffmpeg documentation to understand the [meaning of each block color](https://trac.ffmpeg.org/wiki/Debug/MacroblocksAndMotionVectors#AnalyzingMacroblockTypes).
 >
 > ![intra prediction (macro blocks) with ffmpeg](/i/macro_blocks_ffmpeg.png "inter prediction (motion vectors) with ffmpeg")
 >
@@ -383,7 +394,7 @@ Our **prediction can be wrong**, for that reason we need to apply this technique
 
 ## What? Why? How?
 
-**What?** It's a software / hardware that compresses or decompresses digital video. **Why?** Market and society demands higher quality videos with limited bandwidth or storage. Remember when we [calculated the needed bandwidth](#basic-terminology) for 30 frames per second, 24 bits per pixel, resolution of a 480x240 video? It was **82.944 Mbps** with no compression applied. It's the only way to deliver HD/FullHD/4K in TVs and the Internet. **How?** We'll take a brief look at the major techniques here.
+**What?** It's a piece of software / hardware that compresses or decompresses digital video. **Why?** Market and society demands higher quality videos with limited bandwidth or storage. Remember when we [calculated the needed bandwidth](#basic-terminology) for 30 frames per second, 24 bits per pixel, resolution of a 480x240 video? It was **82.944 Mbps** with no compression applied. It's the only way to deliver HD/FullHD/4K in TVs and the Internet. **How?** We'll take a brief look at the major techniques here.
 
 > **CODEC vs Container**
 >
@@ -393,13 +404,13 @@ Our **prediction can be wrong**, for that reason we need to apply this technique
 
 ## History
 
-Before we jump in the inner works of a generic codec, let's look back to understand a little better about some old video codecs.
+Before we jump into the inner workings of a generic codec, let's look back to understand a little better about some old video codecs.
 
 The video codec [H.261](https://en.wikipedia.org/wiki/H.261)  was born in 1990 (technically 1988), and it was designed to work with **data rates of 64 kbit/s**. It already uses ideas such as chroma subsampling, macro block, etc. In the year of 1995, the **H.263** video codec standard was published and continued to be extended until 2001.
 
 In 2003 the first version of **H.264/AVC** was completed. In the same year, a company called **TrueMotion** released their video codec as a **royalty-free** lossy video compression called **VP3**. In 2008, **Google bought** this company, releasing **VP8** in the same year. In December of 2012, Google released the **VP9** and it's  **supported by roughly ¾ of the browser market** (mobile included).
 
- **[AV1](https://en.wikipedia.org/wiki/AOMedia_Video_1)** is a new video codec, **royalty-free**, open source being designed by the [Alliance for Open Media (AOMedia)](http://aomedia.org/) which is composed of the **companies: Google, Mozilla, Microsoft, Amazon, Netflix, AMD, ARM, NVidia, Intel, Cisco** among others. The **first version** 0.1.0 of the reference codec was **published on April 7, 2016**.
+ **[AV1](https://en.wikipedia.org/wiki/AOMedia_Video_1)** is a new **royalty-free** and open source video codec that's being designed by the [Alliance for Open Media (AOMedia)](http://aomedia.org/), which is composed of the **companies: Google, Mozilla, Microsoft, Amazon, Netflix, AMD, ARM, NVidia, Intel and Cisco** among others. The **first version** 0.1.0 of the reference codec was **published on April 7, 2016**.
 
 ![codec history timeline](/i/codec_history_timeline.png "codec history timeline")
 
@@ -445,13 +456,13 @@ Remember that we learned how **frames are typed**?! Well, you can **apply those 
 
 ## 2nd step - predictions
 
-Once we have the partitions, we can make predictions over them. For the [inter prediction](/digital_video_introduction#temporal-redundancy-inter-prediction) we need **to send the motion vectors and the residual** and the [intra prediction](/digital_video_introduction#spatial-redundancy-intra-prediction) we'll **send the prediction direction and the residual** as well.
+Once we have the partitions, we can make predictions over them. For the [inter prediction](#temporal-redundancy-inter-prediction) we need **to send the motion vectors and the residual** and the [intra prediction](#spatial-redundancy-intra-prediction) we'll **send the prediction direction and the residual** as well.
 
 ## 3rd step - transform
 
-After we get the residual block (`predicted partition - real partition`), we can **transform** it in a way that we can know which **pixels we can discard** but still keeping the **overall quality**. There are some transformations for this exact behavior.
+After we get the residual block (`predicted partition - real partition`), we can **transform** it in a way that lets us know which **pixels we can discard** while keeping the **overall quality**. There are some transformations for this exact behavior.
 
-Although there are [other transformations](https://en.wikipedia.org/wiki/List_of_Fourier-related_transforms#Discrete_transforms), we'll look more closely the discrete cosine transform (DCT). The [**DCT**](https://en.wikipedia.org/wiki/Discrete_cosine_transform) main features are:
+Although there are [other transformations](https://en.wikipedia.org/wiki/List_of_Fourier-related_transforms#Discrete_transforms), we'll look more closely at the discrete cosine transform (DCT). The [**DCT**](https://en.wikipedia.org/wiki/Discrete_cosine_transform) main features are:
 
 * **converts** blocks of **pixels** into  same-sized blocks of **frequency coefficients**.
 * **compacts** energy, making it easy to eliminate spatial redundancy.
@@ -488,17 +499,17 @@ In an image, **most of the energy** will be concentrated in the [**lower frequen
 
 > frequency means how fast a signal is changing
 
-Let's try to apply the knowledge we acquired in the test, we'll convert the original image to its frequency (block of coefficients) using DCT and then throw away part of the least important coefficients.
+Let's try to apply the knowledge we acquired in the test by converting the original image to its frequency (block of coefficients) using DCT and then throwing away part of the least important coefficients.
 
 First, we convert it to its **frequency domain**.
 
 ![coefficients values](/i/dct_coefficient_values.png "coefficients values")
 
-And then we discard part (67%) of the coefficients, mostly the bottom right part of it.
+Next, we discard part (67%) of the coefficients, mostly the bottom right part of it.
 
 ![zeroed coefficients](/i/dct_coefficient_zeroed.png "zeroed coefficients")
 
-And then we reconstruct the image from this discarded block of coefficients (remember, it needs to be reversible) and compare it to the original.
+Finally, we reconstruct the image from this discarded block of coefficients (remember, it needs to be reversible) and compare it to the original.
 
 ![original vs quantized](/i/original_vs_quantized.png "original vs quantized")
 
@@ -528,7 +539,7 @@ As we can see it resembles the original image but it introduced lots of differen
 
 When we throw away some of the coefficients, in the last step (transform), we kinda did some form of quantization. This step is where we chose to lose information (the **lossy part**) or in simple terms, we'll **quantize coefficients to achieve compression**.
 
-How can we quantize a block of coefficients? One simple method would be a uniform quantization, we take a block and **divide it by a single value** (10) and round this value.
+How can we quantize a block of coefficients? One simple method would be a uniform quantization, where we take a block, **divide it by a single value** (10) and round this value.
 
 ![quantize](/i/quantize.png "quantize")
 
@@ -825,6 +836,14 @@ Books:
 * https://www.amazon.com/Practical-Guide-Video-Audio-Compression/dp/0240806301/ref=sr_1_3?s=books&ie=UTF8&qid=1486396914&sr=1-3&keywords=A+PRACTICAL+GUIDE+TO+VIDEO+AUDIO
 * https://www.amazon.com/Video-Encoding-Numbers-Eliminate-Guesswork/dp/0998453005/ref=sr_1_1?s=books&ie=UTF8&qid=1486396940&sr=1-1&keywords=jan+ozer
 
+Onboarding material:
+
+* https://github.com/Eyevinn/streaming-onboarding
+* https://howvideo.works/
+* https://www.aws.training/Details/eLearning?id=17775
+* https://www.aws.training/Details/eLearning?id=17887
+* https://www.aws.training/Details/Video?id=24750
+
 Bitstream Specifications:
 
 * http://www.itu.int/rec/T-REC-H.264-201610-I
@@ -833,6 +852,8 @@ Bitstream Specifications:
 * http://iphome.hhi.de/wiegand/assets/pdfs/2012_12_IEEE-HEVC-Overview.pdf
 * http://phenix.int-evry.fr/jct/doc_end_user/current_document.php?id=7243
 * http://gentlelogic.blogspot.com.br/2011/11/exploring-h264-part-2-h264-bitstream.html
+* https://forum.doom9.org/showthread.php?t=167081
+* https://forum.doom9.org/showthread.php?t=168947
 
 Software:
 
@@ -851,6 +872,7 @@ Non-ITU Codecs:
 * https://people.xiph.org/~jm/daala/revisiting/
 * https://www.youtube.com/watch?v=lzPaldsmJbk
 * https://fosdem.org/2017/schedule/event/om_av1/
+* https://jmvalin.ca/papers/AV1_tools.pdf
 
 Encoding Concepts:
 
@@ -863,6 +885,8 @@ Encoding Concepts:
 * http://web.ece.ucdavis.edu/cerl/ReliableJPEG/Cung/jpeg.html
 * http://www.adobe.com/devnet/adobe-media-server/articles/h264_encoding.html
 * https://prezi.com/8m7thtvl4ywr/mp3-and-aac-explained/
+* https://blogs.gnome.org/rbultje/2016/12/13/overview-of-the-vp9-video-codec/
+* https://videoblerg.wordpress.com/2017/11/10/ffmpeg-and-how-to-use-it-wrong/
 
 Video Sequences for Testing:
 
@@ -871,7 +895,7 @@ Video Sequences for Testing:
 
 Miscellaneous:
 
-* http://stackoverflow.com/a/24890903
+* https://github.com/Eyevinn/streaming-onboarding
 * http://stackoverflow.com/a/24890903
 * http://stackoverflow.com/questions/38094302/how-to-understand-header-of-h264
 * http://techblog.netflix.com/2016/08/a-large-scale-comparison-of-x264-x265.html
@@ -923,3 +947,4 @@ Miscellaneous:
 * https://www.youtube.com/watch?v=LFXN9PiOGtY
 * https://www.youtube.com/watch?v=Lto-ajuqW3w&list=PLzH6n4zXuckpKAj1_88VS-8Z6yn9zX_P6
 * https://www.youtube.com/watch?v=LWxu4rkZBLw
+* https://web.stanford.edu/class/ee398a/handouts/lectures/EE398a_MotionEstimation_2012.pdf
